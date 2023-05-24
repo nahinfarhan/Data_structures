@@ -1,0 +1,125 @@
+//Circulaar header linked list
+#include "bits/stdc++.h"
+
+using namespace std;
+struct node
+{
+    int data;
+    node *link;
+};
+
+node *createNode(int ndata)
+{
+    node *newNode = new node;
+    newNode->data = ndata;
+    newNode->link = newNode;
+    return newNode;
+}
+node *insrtBegin(node *tail, int ndata)
+{
+    node *newNode = tail->link;
+    newNode->data = newNode->data + 1;
+    node *newnode = new node;
+    newnode->data = ndata;
+    node *c = tail->link;
+    newnode->link = c->link;
+    c->link = newnode;
+    return tail;
+}
+node *insrtEnd(node *tail, int ndata)
+{
+    node *temp = tail->link;
+    temp->data++;
+    node *newnode = new node;
+    newnode->data = ndata;
+    newnode->link = tail->link;
+    tail->link = newnode;
+    tail = tail->link;
+    return tail;
+}
+
+
+node *insrtAfter(node *tail, int ndata, int val)
+{
+    node *Node = tail->link;
+    Node->data++;
+    node *temp = tail->link;
+    node *newnode = new node;
+    newnode->data = ndata;
+    newnode->link = nullptr;
+    int cnt = 0;
+    do
+    {
+        if (temp->data == val)
+        {
+            cnt++;
+            newnode->link = temp->link;
+            temp->link = newnode;
+        }
+        temp = temp->link;
+    } while (temp != tail->link);
+    if (temp == tail)
+    {
+        tail = tail->link;
+    }
+    if (cnt == 0)
+    {
+        cout << "insertion failed." << endl;
+        return tail;
+    }
+    else
+    {
+        return tail;
+    }
+}
+void deleteNode(node *&tail, int val)
+{
+    node *newNode = tail->link;
+    newNode->data = newNode->data - 1;
+    node *temp = tail->link;
+    node *prv = nullptr;
+    do
+    {
+        if (temp->data == val)
+        {
+            break;
+        }
+        prv = temp;
+        temp = temp->link;
+    } while (temp != tail->link);
+
+    prv->link = temp->link;
+    free(temp);
+}
+void traverselist(node *tail)
+{
+    node *curr = tail->link;
+    cout << "H ";
+    do
+    {
+        cout << curr->data << "->";
+        curr = curr->link;
+    } while (curr != tail->link);
+    curr = curr->link;
+    cout << curr->data;
+    cout << endl;
+}
+int main()
+{
+    node *tail;
+    tail = createNode(0);
+    tail = insrtEnd(tail, 13);
+    tail = insrtEnd(tail, 15);
+    cout << "linked list:";
+    traverselist(tail);
+    tail = insrtBegin(tail, 11);
+    cout << "Updated Linked List after insertion at Begin: ";
+    traverselist(tail);
+    cout << "Updated Linked List after insertion after value: ";
+    tail = insrtAfter(tail, 17, 13);
+    traverselist(tail);   
+    deleteNode(tail, 13);
+    cout << "Updated Linked List after deletion: ";
+    traverselist(tail);
+    return 0;
+}
