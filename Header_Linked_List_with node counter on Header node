@@ -1,0 +1,111 @@
+// Header Linked List
+#include "bits/stdc++.h"
+
+using namespace std;
+
+struct Node {
+    int data;
+    Node* next;
+};
+
+Node* createNode(int value) {
+    Node* newNode = new Node;
+    newNode->data = value;
+    newNode->next = nullptr;
+    return newNode;
+}
+
+void insrtBegin(Node* header, int value) {
+    Node* newNode = createNode(value);
+    header->data = (header->data)+1;
+    newNode->next = header->next;
+    header->next = newNode;
+}
+
+void insrtEnd(Node* header, int value) {
+    Node* newNode = createNode(value);
+    Node* curr = header;
+    header->data = (header->data)+1;
+    while (curr->next != nullptr) {
+        curr = curr->next;
+    }
+    curr->next = newNode;
+}
+
+void insrtAfter(Node* header, int value, int newValue) {
+    Node* curr = header->next;
+    while (curr != nullptr) {
+        if (curr->data == value) {
+            Node* newNode = createNode(newValue);
+            newNode->next = curr->next;
+            curr->next = newNode;
+            header->data = (header->data)+1;
+            cout << "Node is inserted after " << value << endl;
+            return;
+        }
+        curr = curr->next;
+    }
+    cout << "Value " << value << " not found. Insertion failed." << endl;
+}
+
+void deleteNode(Node* header, int value) {
+    Node* curr = header->next;
+    Node* prev = header;
+    while (curr != nullptr) {
+        if (curr->data == value) {
+            prev->next = curr->next;
+            delete curr;
+            cout << "Node with value " << value << " is deleted." << endl;
+            header->data = (header->data)-1;
+            return;
+        }
+        prev = curr;
+        curr = curr->next;
+    }
+    cout << "Value " << value << " not found. Deletion failed." << endl;
+}
+
+void traverseList(Node* header) {
+    Node* curr = header;
+    cout << "H ";
+    while (curr != nullptr) {
+        cout << curr->data << " -> ";
+        curr = curr->next;
+    }
+    cout << "NULL" << endl;
+}
+
+int main() {
+    Node* header = createNode(0);
+
+    insrtBegin(header, 11);
+    
+    cout << "Linked List: ";
+    traverseList(header);
+
+    insrtEnd(header, 13);
+    insrtEnd(header, 15);
+    cout << "\nUpdated Linked List after insertion at end: ";
+    traverseList(header);
+
+    insrtAfter(header, 13, 17);
+    insrtAfter(header, 18, 17);
+    cout << "\nUpdated Linked List after insertion after value: ";
+    traverseList(header);
+
+    deleteNode(header, 13);
+    deleteNode(header, 15);
+    cout << "\nUpdated Linked List after deletion: ";
+    traverseList(header);
+
+    deleteNode(header, 11);
+    cout << "\nUpdated Linked List after deletion: ";
+    traverseList(header);
+
+    deleteNode(header, 18);
+
+    cout << "\nUpdated Linked List after deletion: ";
+    traverseList(header);
+
+    return 0;
+}
