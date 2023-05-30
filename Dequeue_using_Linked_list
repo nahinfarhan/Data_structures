@@ -1,0 +1,121 @@
+#include "bits/stdc++.h"
+
+using namespace stdc;
+struct Node {
+    int data;
+    Node* next;
+    Node* prev;
+};
+
+Node* front = nullptr;
+Node* rear = nullptr;
+
+bool isEmpty() {
+    return (front == nullptr);
+}
+
+void insertFront(int value) {
+    Node* newNode = new Node;
+    newNode->data = value;
+    newNode->next = nullptr;
+    newNode->prev = nullptr;
+
+    if (isEmpty()) {
+        front = rear = newNode;
+    } else {
+        newNode->next = front;
+        front->prev = newNode;
+        front = newNode;
+    }
+
+    cout << "Inserted " << value << " at the front." << endl;
+}
+
+void insertRear(int value) {
+    Node* newNode = new Node;
+    newNode->data = value;
+    newNode->next = nullptr;
+    newNode->prev = nullptr;
+
+    if (isEmpty()) {
+        front = rear = newNode;
+    } else {
+        rear->next = newNode;
+        newNode->prev = rear;
+        rear = newNode;
+    }
+
+    cout << "Inserted " << value << " at the rear." << endl;
+}
+
+void deleteFront() {
+    if (isEmpty()) {
+        cout << "Deque is empty. Cannot delete from the front." << endl;
+        return;
+    }
+
+    Node* temp = front;
+
+    if (front == rear) {
+        front = rear = nullptr;
+    } else {
+        front = front->next;
+        front->prev = nullptr;
+    }
+
+    int value = temp->data;
+    delete temp;
+
+    cout << "Deleted " << value << " from the front." << endl;
+}
+
+void deleteRear() {
+    if (isEmpty()) {
+        cout << "Deque is empty. Cannot delete from the rear." << endl;
+        return;
+    }
+
+    Node* temp = rear;
+
+    if (front == rear) {
+        front = rear = nullptr;
+    } else {
+        rear = rear->prev;
+        rear->next = nullptr;
+    }
+
+    int value = temp->data;
+    delete temp;
+
+    cout << "Deleted " << value << " from the rear." << endl;
+}
+
+void displayDeque() {
+    if (isEmpty()) {
+        cout << "Deque is empty." << endl;
+        return;
+    }
+
+    Node* current = front;
+
+    cout << "Deque: ";
+    while (current != nullptr) {
+        cout << current->data << " ";
+        current = current->next;
+    }
+    cout << endl;
+}
+
+int main() {
+    insertFront(10);
+    insertFront(8);
+    insertRear(20);
+    insertRear(25);
+    insertFront(5);
+    displayDeque(); 
+    deleteFront();
+    deleteRear();
+    displayDeque(); 
+
+    return 0;
+}
