@@ -1,0 +1,74 @@
+#include "bits/stdc++.h"
+
+using namespace std;
+
+void heapify(vector<int>& heap, int n, int i) {
+    int largest = i;  
+    int left = 2 * i + 1;  
+    int right = 2 * i + 2;  
+    
+    if (left < n && heap[left] > heap[largest])
+        largest = left;
+    if (right < n && heap[right] > heap[largest])
+        largest = right;
+    if (largest != i) {
+        swap(heap[i], heap[largest]);
+        heapify(heap, n, largest);
+    }
+}
+void buildHeap(vector<int>& heap) {
+    int n = heap.size();
+    for (int i = n / 2 - 1; i >= 0; i--)
+        heapify(heap, n, i);
+}
+void insert(vector<int>& heap, int key) {
+    int n = heap.size();
+    heap.push_back(key);
+    int i = n;
+    while (i > 0 && heap[(i - 1) / 2] < heap[i]) {
+        swap(heap[i], heap[(i - 1) / 2]);
+        i = (i - 1) / 2;
+    }
+}
+void remove(vector<int>& heap, int key) {
+    int n = heap.size();
+    int i = 0;
+    while (i < n && heap[i] != key)
+        i++;
+
+    if (i == n) {
+        cout << "Element not found in the heap." << endl;
+        return;
+    }
+
+    swap(heap[i], heap[n - 1]);  
+    heap.pop_back();  
+    heapify(heap, n - 1, i);  
+}
+bool search(const vector<int>& heap, int key) {
+    for (int i = 0; i < heap.size(); i++) {
+        if (heap[i] == key) {
+            return true;
+        }
+    }
+    return false;
+}
+void print(const vector<int>& heap) {
+    for (int i = 0; i < heap.size(); i++)
+        cout << heap[i] << " ";
+    cout << endl;
+}
+
+int main() {
+    vector<int> heap;
+    insert(heap, 8); insert(heap, 6); insert(heap, 3);
+    insert(heap, 11); insert(heap, 1); insert(heap, 7);
+    cout << "Heap: "; print(heap);
+    remove(heap, 3); remove(heap, 12); remove(heap, 7);
+    cout << "Heap after deletion: "; print(heap);
+
+    int key;  cout << "Enter key to search: ";  cin >> key;
+    cout << "Searching for key " << key << ": " 
+            << (search(heap, key) ? "Found" : "Not Found") << endl;
+    return 0;
+}
